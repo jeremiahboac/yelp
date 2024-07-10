@@ -2,32 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+/* Navbar */
+nav {
+  @apply flex items-center align-middle justify-between max-w-full py-6 px-8 bg-black/95 text-gray-600
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+nav button {
+  @apply hover:text-white
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+nav h1 {
+  @apply text-2xl text-white mr-2
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.nav-items {
+  @apply flex items-center gap-4 text-center align-middle
+}
+
+.nav-items>ul {
+  @apply flex items-center gap-4
+}
+
+ul>li {
+  @apply hover:text-white
+}
+
+/* Login & Register Button */
+.cl-formButtonPrimary {
+  @apply text-[14px] transform-none bg-black/95
 }
