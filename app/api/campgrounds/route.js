@@ -9,6 +9,7 @@ export const GET = async () => {
 export const POST = async (request) => {
   const { email } = await request.json()
   return NextResponse.json({
+    success: true,
     email
   })
 }
