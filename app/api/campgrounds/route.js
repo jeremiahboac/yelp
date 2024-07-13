@@ -10,6 +10,7 @@ export const POST = async (request) => {
   const { email } = await request.json()
   return NextResponse.json({
     success: true,
+    message: 'Successfully fetched email.',
     email
   })
 }
