@@ -7,9 +7,10 @@ export const GET = async () => {
 }
 
 export const POST = async (request) => {
-  const { email } = await request.json()
+  console.log('run')
+  const data = await request.json()
+  console.log(data)
   return NextResponse.json({
-    success: true,
-    email
+    data
   })
 }

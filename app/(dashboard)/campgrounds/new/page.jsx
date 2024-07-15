@@ -1,18 +1,27 @@
 'use client'
 
+// SHADCN UI
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "react-hook-form"
+
+// ZOD 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { campgroundSchema } from "@/lib/zod.schema/campground"
+
+// NEXT
 import Link from "next/link"
-import { useEffect, useState } from "react"
+
+// CUSTOM HOOK
+import useFetchAddress from "@/hooks/useFetchAddress"
+
+// UTILS
+import { tobase64Handler } from "@/utils/imageConverter"
 
 const NewCampground = () => {
-  const [addressList, setAddressList] = useState([])
   const form = useForm({
     defaultValues: {
       title: "",
@@ -26,36 +35,37 @@ const NewCampground = () => {
   const { watch, setValue, formState: { isSubmitting } } = form
   const location = watch('location')
 
-  const getLocations = async () => {
+  const { addressList, setAddressList, setInitialized } = useFetchAddress(location)
+
+  const onSubmit = async (data) => {
     try {
-      const res = await fetch(`/api/mapbox?q=${location}`, {
-        headers: {
-          'Content-Type': 'application/json'
+      const { success, mappedFiles } = await tobase64Handler(data.images)
+
+      if (success) {
+        const res = await fetch(`/api/campgrounds`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            ...data,
+            images: mappedFiles
+          })
+        })
+
+        if (!res.ok) {
+          console.log('Something went wrong.')
         }
-      })
-      const { data } = await res.json()
-      setAddressList(data)
+      }
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      getLocations()
-    }, 1000)
-
-    return () => clearTimeout(delay)
-  }, [location])
-
-  const onSubmit = (data) => {
-    console.log(data)
-  }
-
   const handleClick = (address) => {
+    setInitialized(true)
     setAddressList([])
-    console.log(address)
-    // setValue('location', address)
+    setValue('location', address)
   }
 
   return (
@@ -66,7 +76,7 @@ const NewCampground = () => {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" encType="multipart/form-data">
               <FormField
                 control={form.control}
                 name="title"
@@ -110,10 +120,17 @@ const NewCampground = () => {
                   )}
                 />
 
-                {addressList.length > 0 && <div className="absolute bg-white w-full border rounded-md p-4 shadow-md cursor-pointer">
-                  {addressList.length > 0 && addressList.map((address, index) => {
-                    return <p key={index} className="text-sm py-1 hover:bg-gray-200" onClick={() => handleClick(address.place_formatted)}>{address.place_formatted}</p>
-                  })}
+                {addressList && addressList.length > 0 && <div className="absolute bg-white w-full border rounded-md p-4 shadow-md cursor-pointer">
+                  <div className="max-h-52 overflow-auto">
+                    {addressList.length > 0 && addressList.map((address, index) => {
+                      return (
+                        <div key={index} className="text-sm py-1 hover:bg-gray-200" onClick={() => handleClick(address.place_name)}>
+                          <p>{address.place_name}</p>
+                          <small className="text-gray-500">{address.place_name_en}</small>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>}
               </div>
 
@@ -139,9 +156,9 @@ const NewCampground = () => {
                 )}
               />
               <div className="flex gap-2">
-                <Button type="submit" className="bg-black/90 hover:bg-black/85 text-white w-full">Submit</Button>
+                <Button type="submit" className="bg-black/90 hover:bg-black/85 text-white w-full" disabled={isSubmitting}>{!isSubmitting ? 'Submit' : 'Submitting...'}</Button>
                 <Link href={'/campgrounds'} className="w-full">
-                  <Button type="button" className="bg-red-700 hover:bg-red-600 text-white w-full">Cancel</Button>
+                  <Button type="button" className="bg-red-700 hover:bg-red-600 text-white w-full" disabled={isSubmitting}>Cancel</Button>
                 </Link>
               </div>
             </form>

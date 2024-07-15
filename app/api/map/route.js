@@ -3,23 +3,21 @@ import { NextResponse } from "next/server"
 export const GET = async (request) => {
   const searchText = request.nextUrl.searchParams.get('q')
   try {
-    const res = await fetch(`${process.env.MAPBOX_SEARCH_URL}?q=${searchText}?language=en&session_token=${process.env.MAP_BOX_SESSION_TOKEN}&country=PH&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    const URL = `https://api.maptiler.com/geocoding/${searchText}.json?language=en&types=country%2Cregion%2Csubregion%2Ccounty%2Cjoint_municipality%2Cjoint_submunicipality%2Cmunicipality%2Cmunicipal_district%2Clocality%2Cneighbourhood%2Cplace%2Cpostal_code%2Cpoi&country=ph&proximity=ip&autocomplete=false&fuzzyMatch=false&key=${process.env.MAPTILER_API_KEY}`
+
+    const res = await fetch(URL)
 
     if (!res) throw ({
       message: 'Cannot search address. Please try again later.',
       status: 500
     })
 
-    const { suggestions } = await res.json()
-
+    const data = await res.json()
+    const { features } = data
 
     return NextResponse.json({
       success: true,
-      data: suggestions
+      data: features
     }, { status: 200 })
   } catch (error) {
     return NextResponse.json({
