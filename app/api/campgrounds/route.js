@@ -1,16 +1,21 @@
 import { uploader } from "@/lib/actions/cloudinary.action"
 import { connect } from "@/lib/database/mongodb"
 import Campground from "@/lib/models/campground"
+import User from "@/lib/models/user"
 import { currentUser } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 
 export const GET = async () => {
   try {
-    throw ({
-      message: 'Something went wrong.',
-      success: false,
-      status: 500
-    })
+    const campground = await Campground.find({})
+      .populate('author', 'email', User)
+      .sort({ createdAt: 'desc' })
+
+    return NextResponse.json({
+      success: true,
+      campground
+    }, { status: 200 })
+
   } catch (error) {
     return NextResponse.json({
       message: error.message,
