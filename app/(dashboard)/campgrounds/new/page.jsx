@@ -14,12 +14,17 @@ import { campgroundSchema } from "@/lib/zod.schema/campground"
 
 // NEXT
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 // CUSTOM HOOK
 import useFetchAddress from "@/hooks/useFetchAddress"
 
 // UTILS
 import { tobase64Handler } from "@/utils/imageConverter"
+
+// TOAST
+import { toast } from "sonner"
+
 
 const NewCampground = () => {
   const form = useForm({
@@ -34,6 +39,8 @@ const NewCampground = () => {
 
   const { watch, setValue, formState: { isSubmitting } } = form
   const location = watch('location')
+
+  const router = useRouter()
 
   const { addressList, setAddressList, setInitialized } = useFetchAddress(location)
 
@@ -55,6 +62,18 @@ const NewCampground = () => {
 
         if (!res.ok) {
           console.log('Something went wrong.')
+        }
+
+        const { message, campground, success } = await res.json()
+
+        if (success) {
+          toast.success(message, {
+            position: 'bottom-right',
+            duration: 2000
+          })
+
+          router.push('/campgrounds')
+          router.refresh()
         }
       }
     } catch (error) {
@@ -84,7 +103,7 @@ const NewCampground = () => {
                   <FormItem>
                     <FormLabel>Title:</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} disabled={isSubmitting} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -98,7 +117,7 @@ const NewCampground = () => {
                   <FormItem>
                     <FormLabel>Description:</FormLabel>
                     <FormControl>
-                      <Textarea className="resize-none" {...field} />
+                      <Textarea className="resize-none" {...field} disabled={isSubmitting} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -149,6 +168,7 @@ const NewCampground = () => {
                         onChange={(e) => {
                           return onChange(e.target.files)
                         }}
+                        disabled={isSubmitting}
                       />
                     </FormControl>
                     <FormMessage />
