@@ -1,8 +1,7 @@
+import { uploader } from "@/lib/actions/cloudinary.action"
 import { connect } from "@/lib/database/mongodb"
 import Campground from "@/lib/models/campground"
-import { uploader } from "@/utils/imageUploader"
 import { currentUser } from "@clerk/nextjs/server"
-import { ApiError } from "next/dist/server/api-utils"
 import { NextResponse } from "next/server"
 
 export const GET = async () => {
@@ -52,13 +51,5 @@ export const POST = async (request) => {
       message: error.message,
       success: false
     }, { status: error.status })
-  }
-}
-
-export const conf = {
-  api: {
-    bodyParser: {
-      sizeLimit: '8mb'
-    }
   }
 }

@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation"
 import useFetchAddress from "@/hooks/useFetchAddress"
 
 // UTILS
-import { tobase64Handler } from "@/utils/imageConverter"
+import { toBase64Handler } from "@/utils/imageConverter"
 
 // TOAST
 import { toast } from "sonner"
@@ -46,7 +46,8 @@ const NewCampground = () => {
 
   const onSubmit = async (data) => {
     try {
-      const { success, mappedFiles } = await tobase64Handler(data.images)
+
+      const { success, images } = await toBase64Handler(data.images)
 
       if (success) {
         const res = await fetch(`/api/campgrounds`, {
@@ -56,7 +57,7 @@ const NewCampground = () => {
           },
           body: JSON.stringify({
             ...data,
-            images: mappedFiles
+            images
           })
         })
 

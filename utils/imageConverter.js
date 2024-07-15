@@ -1,20 +1,17 @@
-const toBase64 = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-};
+export const toBase64Handler = async (images) => {
+  const imageList = []
+  for (const image of images) {
+    const imageBuffer = await image.arrayBuffer()
+    const imageArray = Array.from(new Uint8Array(imageBuffer))
+    const imageData = Buffer.from(imageArray)
 
-export const tobase64Handler = async (files) => {
-  const filePathsPromises = [];
+    const imageBase64 = imageData.toString('base64')
 
-  for (let file of files) {
-    filePathsPromises.push(toBase64(file));
+    imageList.push(imageBase64)
   }
 
-  const filePaths = await Promise.all(filePathsPromises);
-  const mappedFiles = filePaths.map((base64File) => base64File);
-  return { success: true, mappedFiles };
+  return {
+    success: true,
+    images: imageList
+  }
 }
