@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <nav>
       <div className="nav-items">
-        <h1>YelpCamp</h1>
+        <h1 className="font-bold">YelpCamp</h1>
         <ul>
           <li>
             <Link href={'/'}>Home</Link>
