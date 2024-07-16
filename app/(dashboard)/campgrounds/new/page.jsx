@@ -46,7 +46,6 @@ const NewCampground = () => {
 
   const onSubmit = async (data) => {
     try {
-
       const { success, images } = await toBase64Handler(data.images)
 
       if (success) {
@@ -79,9 +78,7 @@ const NewCampground = () => {
             position: 'bottom-right',
             duration: 2000
           })
-
-          router.push('/campgrounds')
-          router.refresh()
+          router.push(`/campgrounds/${campground._id}`)
         }
       }
     } catch (error) {

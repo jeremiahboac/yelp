@@ -5,15 +5,18 @@ import User from "@/lib/models/user"
 import { currentUser } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 
+export const dynamic = 'force-dynamic'
+
 export const GET = async () => {
   try {
-    const campground = await Campground.find({})
-      .populate('author', 'email', User)
+    await connect()
+    const campgrounds = await Campground.find({})
+      .populate('author', 'email firstName lastName', User)
       .sort({ createdAt: 'desc' })
 
     return NextResponse.json({
       success: true,
-      campground
+      campgrounds
     }, { status: 200 })
 
   } catch (error) {
