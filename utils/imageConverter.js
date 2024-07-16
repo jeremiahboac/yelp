@@ -1,17 +1,18 @@
 export const toBase64Handler = async (images) => {
-  const imageList = []
-  for (const image of images) {
+  const promises = Array.from(images).map(async (image) => {
     const imageBuffer = await image.arrayBuffer()
     const imageArray = Array.from(new Uint8Array(imageBuffer))
     const imageData = Buffer.from(imageArray)
 
-    const imageBase64 = imageData.toString('base64')
+    return imageData.toString('base64')
+  })
 
-    imageList.push(imageBase64)
-  }
+  const imageList = await Promise.all(promises)
 
-  return {
-    success: true,
-    images: imageList
+  if (imageList) {
+    return {
+      success: true,
+      images: imageList
+    }
   }
 }
