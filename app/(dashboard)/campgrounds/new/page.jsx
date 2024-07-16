@@ -61,6 +61,13 @@ const NewCampground = () => {
           })
         })
 
+        if (res.status === 413) {
+          toast.error('File too large.', {
+            position: 'bottom-right',
+            duration: 2000
+          })
+        }
+
         if (!res.ok) {
           console.log('Something went wrong.')
         }
