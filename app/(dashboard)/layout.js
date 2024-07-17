@@ -4,7 +4,9 @@ const DashboardLayout = ({ children }) => {
   return (
     <main>
       <Navbar />
-      {children}
+      <div className=" transform translate-y-24">
+        {children}
+      </div>
     </main>
   )
 }

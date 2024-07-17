@@ -1,13 +1,6 @@
 import Image from "next/image"
 import { CiLocationOn } from "react-icons/ci";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import Link from "next/link";
 
 const fetchCampgrounds = async () => {
@@ -39,13 +32,13 @@ const Campgrounds = async () => {
   const { data: { campgrounds } } = await fetchCampgrounds()
 
   if (!campgrounds.length) {
-    return <main>
+    return <main className="container">
       <h1>No available campground.</h1>
     </main>
   }
 
   return (
-    <main className="container flex flex-col gap-4 mt-4">
+    <main className="container flex flex-col gap-4">
       {campgrounds.map(campground => {
         const { title, description, images, location, _id } = campground
         return (

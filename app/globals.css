@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 nav {
-  @apply flex items-center align-middle justify-between max-w-full py-6 px-8 bg-black/95 text-gray-600
+  @apply flex items-center align-middle justify-between py-6 px-8 bg-black/95 text-gray-600 fixed z-50 w-full top-0
 }
 
 nav button {

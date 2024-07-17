@@ -96,9 +96,9 @@ const NewCampground = () => {
     <div className="container mt-10 max-w-2xl">
       <Card>
         <CardHeader>
-          <CardTitle className="text-center mb-5">New Campground</CardTitle>
+          <CardTitle className="text-center">New Campground</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" encType="multipart/form-data">
               <FormField

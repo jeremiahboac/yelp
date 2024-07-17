@@ -19,10 +19,14 @@ const useFetchAddress = (location) => {
   const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
-    if (location.length === 0) setInitialized(false)
+    if (!location.length) setInitialized(false)
+
+    if (!location.length && addressList.length) {
+      setAddressList([])
+    }
 
     const delay = setTimeout(async () => {
-      if (!initialized) {
+      if (!initialized && location.length) {
         const addresses = await getLocations(location)
         setAddressList(addresses.data)
       }
