@@ -25,7 +25,19 @@ const Map = () => {
 
     map.current.on('load', () => {
 
-      map.current.addControl(new mapboxgl.NavigationControl());
+      map.current.addControl(new mapboxgl.NavigationControl({
+        visualizePitch: true
+      }));
+
+      map.current.addControl(
+        new mapboxgl.GeolocateControl({
+          positionOptions: {
+            enableHighAccuracy: true
+          },
+          trackUserLocation: true,
+          showUserHeading: true
+        })
+      );
 
       // add a clustered GeoJSON source for a sample set of earthquakes
       map.current.addSource('earthquakes', {
