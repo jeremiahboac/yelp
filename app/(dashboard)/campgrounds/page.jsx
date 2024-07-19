@@ -3,6 +3,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import Link from "next/link";
 import Map from "@/components/Map";
+import { Suspense } from "react";
 
 const fetchCampgrounds = async () => {
   try {
@@ -39,7 +40,7 @@ const Campgrounds = async () => {
   }
 
   return (
-    <>
+    <Suspense fallback={'Loading...'}>
       <div className="mb-5">
         <Map />
       </div>
@@ -71,7 +72,7 @@ const Campgrounds = async () => {
           )
         })}
       </main>
-    </>
+    </Suspense>
 
   )
 }

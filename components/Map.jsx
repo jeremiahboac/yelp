@@ -9,7 +9,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 const Map = () => {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const phil = { lng: 119.50011624937103, lat: 11.065150068759879 };
+  const phil = { lng: 122.50011624937103, lat: 11.065150068759879 };
   const [zoom] = useState(4);
   maptilersdk.config.apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
 
