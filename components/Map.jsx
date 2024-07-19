@@ -1,29 +1,32 @@
 'use client'
 
 import React, { useRef, useEffect, useState } from 'react';
-import * as maptilersdk from '@maptiler/sdk';
-import "@maptiler/sdk/dist/maptiler-sdk.css";
-import maplibregl from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 const Map = () => {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const phil = { lng: 122.50011624937103, lat: 11.065150068759879 };
-  const [zoom] = useState(4);
-  maptilersdk.config.apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
+  const phil = { lng: 122.50011624937103, lat: 11.895150068759879 };
+  const [zoom] = useState(4.1);
+
+  mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
   useEffect(() => {
     if (map.current) return; // stops map from intializing more than once
 
-    map.current = new maptilersdk.Map({
+    map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: maptilersdk.MapStyle.DATAVIZ.DARK,
+      style: 'mapbox://styles/mapbox/dark-v11',
       center: [phil.lng, phil.lat],
-      zoom: zoom
+      zoom: zoom,
+      projection: 'mercator'
     });
 
     map.current.on('load', () => {
+
+      map.current.addControl(new mapboxgl.NavigationControl());
+
       // add a clustered GeoJSON source for a sample set of earthquakes
       map.current.addSource('earthquakes', {
         'type': 'geojson',
@@ -96,16 +99,15 @@ const Map = () => {
           layers: ['clusters']
         });
         const clusterId = features[0].properties.cluster_id;
-        map.current
-          .getSource('earthquakes')
-          .getClusterExpansionZoom(clusterId, (err, zoom) => {
-            if (err) return;
+        const source = map.current.getSource('earthquakes')
+        source.getClusterExpansionZoom(clusterId, (err, expansionZoom) => {
+          if (err) return;
 
-            map.current.easeTo({
-              center: features[0].geometry.coordinates,
-              zoom: zoom
-            });
+          map.current.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: expansionZoom
           });
+        });
       });
 
       // When a click event occurs on a feature in
@@ -124,7 +126,7 @@ const Map = () => {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
 
-        new maplibregl.Popup()
+        new mapboxgl.Popup()
           .setLngLat(coordinates)
           .setHTML(
             'magnitude: ' + mag + '<br>Was there a tsunami?: ' + tsunami
