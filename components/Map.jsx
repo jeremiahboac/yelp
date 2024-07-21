@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const Map = () => {
+const Map = ({ campgrounds }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const phil = { lng: 122.50011624937103, lat: 11.895150068759879 };
@@ -39,10 +39,10 @@ const Map = () => {
         })
       );
 
-      // add a clustered GeoJSON source for a sample set of earthquakes
-      map.current.addSource('earthquakes', {
+      // add a clustered GeoJSON source for a sample set of campgrounds
+      map.current.addSource('campgrounds', {
         'type': 'geojson',
-        'data': 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson',
+        'data': campgrounds,
         cluster: true,
         clusterMaxZoom: 14, // Max zoom to cluster points on
         clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
@@ -51,7 +51,7 @@ const Map = () => {
       map.current.addLayer({
         id: 'clusters',
         type: 'circle',
-        source: 'earthquakes',
+        source: 'campgrounds',
         filter: ['has', 'point_count'],
         paint: {
           // Use step expressions (https://docs.maptiler.com/gl-style-specification/expressions/#step)
@@ -83,7 +83,7 @@ const Map = () => {
       map.current.addLayer({
         id: 'cluster-count',
         type: 'symbol',
-        source: 'earthquakes',
+        source: 'campgrounds',
         filter: ['has', 'point_count'],
         layout: {
           'text-field': '{point_count_abbreviated}',
@@ -95,7 +95,7 @@ const Map = () => {
       map.current.addLayer({
         id: 'unclustered-point',
         type: 'circle',
-        source: 'earthquakes',
+        source: 'campgrounds',
         filter: ['!', ['has', 'point_count']],
         paint: {
           'circle-color': '#11b4da',
@@ -111,7 +111,7 @@ const Map = () => {
           layers: ['clusters']
         });
         const clusterId = features[0].properties.cluster_id;
-        const source = map.current.getSource('earthquakes')
+        const source = map.current.getSource('campgrounds')
         source.getClusterExpansionZoom(clusterId, (err, expansionZoom) => {
           if (err) return;
 

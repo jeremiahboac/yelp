@@ -14,9 +14,20 @@ export const GET = async () => {
       .populate('author', 'email firstName lastName', User)
       .sort({ createdAt: 'desc' })
 
+    const geoData = campgrounds.map(campground => {
+      return {
+        type: "Feature",
+        geometry: campground.geometry
+      }
+    })
+
     return NextResponse.json({
       success: true,
-      campgrounds
+      campgrounds,
+      geometry: {
+        type: "FeatureCollection",
+        features: geoData
+      }
     }, { status: 200 })
 
   } catch (error) {

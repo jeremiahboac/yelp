@@ -17,6 +17,7 @@ const getLocations = async (location) => {
 const useFetchAddress = (location) => {
   const [addressList, setAddressList] = useState([])
   const [initialized, setInitialized] = useState(false)
+  const [geometry, setGeometry] = useState({})
 
   useEffect(() => {
     if (!location.length) setInitialized(false)
@@ -35,6 +36,6 @@ const useFetchAddress = (location) => {
     return () => clearTimeout(delay)
   }, [location])
 
-  return { addressList, setAddressList, setInitialized }
+  return { addressList, setAddressList, setInitialized, geometry, setGeometry }
 }
 export default useFetchAddress

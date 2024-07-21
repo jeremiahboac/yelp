@@ -42,10 +42,13 @@ const NewCampground = () => {
 
   const router = useRouter()
 
-  const { addressList, setAddressList, setInitialized } = useFetchAddress(location)
+  const { addressList, setAddressList, setInitialized, geometry, setGeometry } = useFetchAddress(location)
 
   const onSubmit = async (data) => {
     try {
+      data.title.trim()
+      data.description.trim()
+      data.geometry = geometry
       const { success, images } = await toBase64Handler(data.images)
 
       if (success) {
@@ -86,10 +89,11 @@ const NewCampground = () => {
     }
   }
 
-  const handleClick = (address) => {
+  const handleClick = ({ place_name, geometry }) => {
     setInitialized(true)
     setAddressList([])
-    setValue('location', address)
+    setGeometry(geometry)
+    setValue('location', place_name)
   }
 
   return (
@@ -147,8 +151,9 @@ const NewCampground = () => {
                 {addressList && addressList.length > 0 && <div className="absolute bg-white w-full border rounded-md p-4 shadow-md cursor-pointer">
                   <div className="max-h-52 overflow-auto">
                     {addressList.length > 0 && addressList.map((address, index) => {
+                      const { place_name, geometry } = address
                       return (
-                        <div key={index} className="text-sm py-1 hover:bg-gray-200" onClick={() => handleClick(address.place_name)}>
+                        <div key={index} className="text-sm py-1 hover:bg-gray-200" onClick={() => handleClick({ place_name, geometry })}>
                           <p>{address.place_name}</p>
                           <small className="text-gray-500">{address.place_name_en}</small>
                         </div>
