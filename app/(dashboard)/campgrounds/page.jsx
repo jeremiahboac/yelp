@@ -33,12 +33,6 @@ const fetchCampgrounds = async () => {
 const Campgrounds = async () => {
   const { data: { campgrounds, geometry } } = await fetchCampgrounds()
 
-  if (!campgrounds.length) {
-    return <main className="container">
-      <h1>No available campground.</h1>
-    </main>
-  }
-
   return (
     <Suspense fallback={'Loading...'}>
       <div className="mb-5">
@@ -46,6 +40,12 @@ const Campgrounds = async () => {
           campgrounds={geometry}
         />
       </div>
+
+      {!campgrounds.length && (
+        <div className="container">
+          <h1>No available campground.</h1>
+        </div>
+      )}
 
       <main className="container flex flex-col gap-4">
         {campgrounds.map(campground => {
