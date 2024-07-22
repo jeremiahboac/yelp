@@ -34,13 +34,13 @@ const Campgrounds = async () => {
   const { data: { campgrounds, geometry } } = await fetchCampgrounds()
 
   return (
-    <Suspense fallback={'Loading...'}>
+    <>
       <div className="mb-5">
         <Map
           campgrounds={geometry}
         />
       </div>
-
+    <Suspense fallback={<div className="container">Loading...</div>}>
       {!campgrounds.length && (
         <div className="container">
           <h1>No available campground.</h1>
@@ -75,7 +75,7 @@ const Campgrounds = async () => {
         })}
       </main>
     </Suspense>
-
+    </>
   )
 }
 export default Campgrounds
