@@ -3,6 +3,7 @@ import notFound from "@/public/notFound.svg"
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import Map from "@/components/Map"
+import ImageSwiper from "@/components/ImageSwiper"
 
 const fetchCampground = async (id) => {
   try {
@@ -47,14 +48,8 @@ const Campground = async ({ params: { id } }) => {
       <Card className="row-span-3">
         <CardContent>
           <div className="max-w-full relative">
-            <Image
-              src={images[0].link}
-              alt={title}
-              width={0}
-              height={0}
-              sizes="100vw"
-              className=" object-cover h-[356px] w-full"
-              priority={true}
+            <ImageSwiper
+              images={images}
             />
           </div>
           <div className="p-4">
