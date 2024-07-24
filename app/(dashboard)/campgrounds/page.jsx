@@ -34,48 +34,49 @@ const Campgrounds = async () => {
   const { data: { campgrounds, geometry } } = await fetchCampgrounds()
 
   return (
-    <>
-      <div className="mb-5">
-        <Map
-          campgrounds={geometry}
-        />
-      </div>
-    <Suspense fallback={<div className="container">Loading...</div>}>
-      {!campgrounds.length && (
-        <div className="container">
-          <h1>No available campground.</h1>
-        </div>
-      )}
+    <div className="flex h-screen flex-col">
+      <Map
+        campgrounds={geometry}
+      />
 
-      <main className="container flex flex-col gap-4">
-        {campgrounds.map(campground => {
-          const { title, description, images, location, _id } = campground
-          return (
-            <Card className="hover:shadow-lg" key={_id}>
-              <CardContent className="flex gap-5">
-                <Image
-                  src={images[0].link}
-                  alt={title}
-                  width={350}
-                  height={200}
-                  quality={100}
-                  className=" rounded-tl-md rounded-bl-md"
-                />
-                <div className="flex flex-col justify-between py-6 pr-8">
-                  <CardTitle className="mb-4 text-xl capitalize">{title}</CardTitle>
-                  <CardDescription className="text-black/95 mb-4">{description}</CardDescription>
-                  <CardDescription className="mb-4 flex gap-1"><CiLocationOn className="text-center" size={18} /> {location}</CardDescription>
-                  <Link href={`/campgrounds/${_id}`} className="bg-black/85 hover:bg-black/95 text-white p-2 max-w-20 text-center rounded-md">
-                    View
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          )
-        })}
-      </main>
-    </Suspense>
-    </>
+      <Suspense fallback={<div className="container">Loading...</div>}>
+        {!campgrounds.length ? (
+          <div className="container pt-5">
+            <h1>No available campground.</h1>
+          </div>
+        ) : (
+          <main className="flex-1 pt-5 pb-24 overflow-auto">
+            <div className="container flex flex-col gap-4">
+              {campgrounds.map(campground => {
+                const { title, description, images, location, _id } = campground
+                return (
+                  <Card className="hover:shadow-lg" key={_id}>
+                    <CardContent className="flex gap-5">
+                      <Image
+                        src={images[0].link}
+                        alt={title}
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        className=" object-cover h-[250px] w-96 rounded-tl-md rounded-bl-md"
+                        priority={true}
+                      />
+                      <div className="flex-1 flex flex-col justify-between py-6 pr-8">
+                        <CardTitle className="mb-4 text-xl capitalize">{title}</CardTitle>
+                        <CardDescription className="text-black/95 mb-4">{description}</CardDescription>
+                        <CardDescription className="mb-4 flex gap-1"><CiLocationOn className="text-center" size={18} /> {location}</CardDescription>
+                        <Link href={`/campgrounds/${_id}`} className="bg-black/85 hover:bg-black/95 text-white p-2 max-w-20 text-center rounded-md">
+                          View
+                        </Link>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          </main>)}
+      </Suspense>
+    </div>
   )
 }
 export default Campgrounds

@@ -8,7 +8,8 @@ const Map = ({ campgrounds, isMiniMap = false }) => {
   const mapContainer = useRef();
   const map = useRef();
   const phil = { lng: 122.50011624937103, lat: 11.895150068759879 };
-  const [zoom] = useState(4.1);
+  const zoomLevel = isMiniMap ? 12 : 4.1
+  const [zoom] = useState(zoomLevel);
 
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
@@ -18,7 +19,7 @@ const Map = ({ campgrounds, isMiniMap = false }) => {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
-      center: [phil.lng, phil.lat],
+      center: isMiniMap ? campgrounds.features[0].geometry.coordinates : [phil.lng, phil.lat],
       zoom: zoom,
       projection: 'mercator'
     });
@@ -155,6 +156,20 @@ const Map = ({ campgrounds, isMiniMap = false }) => {
         });
       });
     } else {
+      map.current.addControl(new mapboxgl.NavigationControl({
+        visualizePitch: true
+      }));
+
+      map.current.addControl(
+        new mapboxgl.GeolocateControl({
+          positionOptions: {
+            enableHighAccuracy: true
+          },
+          trackUserLocation: true,
+          showUserHeading: true
+        })
+      );
+
       new mapboxgl.Marker({ color: 'red' })
         .setLngLat(campgrounds.features[0].geometry.coordinates)
         .addTo(map.current);
