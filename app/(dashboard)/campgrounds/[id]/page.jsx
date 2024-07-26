@@ -24,9 +24,11 @@ const fetchCampground = async (id) => {
 }
 
 const Campground = async ({ params: { id } }) => {
-  const { campground, geometry } = await fetchCampground(id)
+  const camp = await fetchCampground(id)
 
-  if (campground === null || campground === undefined) {
+  const { campground, geometry } = camp
+
+  if (!Object.keys(campground).length) {
     return <main className="container flex flex-col items-center gap-10 mt-20 transform translate-y-20">
       <Image
         src={notFound}

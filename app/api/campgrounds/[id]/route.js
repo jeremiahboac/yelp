@@ -1,5 +1,7 @@
 import { connect } from "@/lib/database/mongodb"
 import Campground from "@/lib/models/campground"
+import Review from "@/lib/models/review"
+import User from "@/lib/models/user"
 import mongoose from "mongoose"
 import { NextResponse } from "next/server"
 
@@ -15,12 +17,14 @@ export const GET = async (request, { params: { id } }) => {
 
     await connect()
     const campground = await Campground.findById({ _id: id })
-      .populate('author', 'email firstName lastName')
+      .populate('author', 'email firstName lastName', User)
       .populate({
         path: "reviews",
+        model: Review,
         populate: {
           path: "author",
-          select: 'firstName lastName'
+          select: 'firstName lastName',
+          model: User
         }
       })
 
