@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/c
 import Link from "next/link"
 import Map from "@/components/Map"
 import ImageSwiper from "@/components/ImageSwiper"
+import ReviewForm from "@/components/ReviewForm"
 
 const fetchCampground = async (id) => {
   try {
@@ -44,8 +45,8 @@ const Campground = async ({ params: { id } }) => {
   const { title, images, description, location, author } = campground
 
   return (
-    <main className="container mt-10 grid grid-cols-2 gap-4">
-      <Card className="row-span-3">
+    <main className="container mt-10 grid grid-cols-2 gap-4 transform translate-y-20">
+      <Card className="max-h-[620px]">
         <CardContent>
           <div className="max-w-full relative">
             <ImageSwiper
@@ -61,12 +62,14 @@ const Campground = async ({ params: { id } }) => {
         </CardContent>
       </Card>
 
-      <Card>
+      <div className="flex flex-col pt-[1px] gap-2">
         <Map
           campgrounds={geometry}
           isMiniMap={true}
         />
-      </Card>
+        <ReviewForm />
+
+      </div>
     </main>
   )
 }

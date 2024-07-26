@@ -160,16 +160,6 @@ const Map = ({ campgrounds, isMiniMap = false }) => {
         visualizePitch: true
       }));
 
-      map.current.addControl(
-        new mapboxgl.GeolocateControl({
-          positionOptions: {
-            enableHighAccuracy: true
-          },
-          trackUserLocation: true,
-          showUserHeading: true
-        })
-      );
-
       new mapboxgl.Marker({ color: 'red' })
         .setLngLat(campgrounds.features[0].geometry.coordinates)
         .addTo(map.current);

@@ -14,7 +14,15 @@ export const GET = async (request, { params: { id } }) => {
     })
 
     await connect()
-    const campground = await Campground.findById({ _id: id }).populate('author', 'email firstName lastName')
+    const campground = await Campground.findById({ _id: id })
+      .populate('author', 'email firstName lastName')
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "author",
+          select: 'firstName lastName'
+        }
+      })
 
     if (!campground) throw ({
       campground: {},
@@ -48,3 +56,4 @@ export const GET = async (request, { params: { id } }) => {
     }, { status: error.status })
   }
 }
+

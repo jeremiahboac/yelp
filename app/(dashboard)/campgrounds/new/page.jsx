@@ -99,7 +99,7 @@ const NewCampground = () => {
   }
 
   return (
-    <div className="container mt-10 max-w-2xl">
+    <div className="container mt-10 max-w-2xl transform translate-y-20">
       <Card>
         <CardHeader>
           <CardTitle className="text-center">New Campground</CardTitle>

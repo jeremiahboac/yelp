@@ -34,7 +34,7 @@ const ImageSwiper = ({ images }) => {
             width={0}
             height={0}
             sizes="100vw"
-            className=" object-cover h-[356px] w-full"
+            className=" object-cover h-[355px] w-full"
             priority={true}
           />
         </SwiperSlide>

@@ -34,7 +34,7 @@ const Campgrounds = async () => {
   const { data: { campgrounds, geometry } } = await fetchCampgrounds()
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-screen flex-col transform translate-y-20 pb-10 fixed w-full">
       <Map
         campgrounds={geometry}
       />
@@ -45,7 +45,7 @@ const Campgrounds = async () => {
             <h1>No available campground.</h1>
           </div>
         ) : (
-          <main className="flex-1 pt-5 pb-24 overflow-auto">
+          <main className="flex-1 pt-6 pb-16 overflow-auto">
             <div className="container flex flex-col gap-4">
               {campgrounds.map(campground => {
                 const { title, description, images, location, _id } = campground
