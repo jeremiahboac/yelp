@@ -37,7 +37,7 @@ export const PUT = async (request, { params: { id } }) => {
 
     return NextResponse.json({
       success: true,
-      messsage: 'Successfully added your review',
+      message: 'Successfully added your review',
       campground
     }, { status: 200 })
   } catch (error) {

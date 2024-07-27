@@ -1,6 +1,6 @@
 import Image from "next/image"
 import notFound from "@/public/notFound.svg"
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardTitle, CardFooter } from "@/components/ui/card"
 import Link from "next/link"
 import Map from "@/components/Map"
 import ImageSwiper from "@/components/ImageSwiper"
@@ -44,10 +44,10 @@ const Campground = async ({ params: { id } }) => {
     </main>
   }
 
-  const { title, images, description, location, author } = campground
+  const { title, images, description, location, author, reviews } = campground
 
   return (
-    <main className="container mt-10 grid grid-cols-2 gap-4 transform translate-y-20">
+    <main className="container mt-10 grid grid-cols-2 gap-4 transform translate-y-20 pb-10">
       <Card className="max-h-[620px]">
         <CardContent>
           <div className="max-w-full relative">
@@ -71,6 +71,20 @@ const Campground = async ({ params: { id } }) => {
         />
         <ReviewForm />
 
+        {reviews.length > 0 && reviews.map(review => {
+          const { _id, body, createdAt, author: { firstName, lastName } } = review
+          return (
+            <Card key={_id}>
+              <CardContent className="p-3 flex flex-col gap-4">
+                <CardTitle className="text-sm">{firstName} {lastName}</CardTitle>
+                <CardDescription>{body}</CardDescription>
+                <div className="w-full border-t border-gray-300">
+                  <small>{createdAt}</small>
+                </div>
+              </CardContent>
+            </Card>
+          )
+        })}
       </div>
     </main>
   )

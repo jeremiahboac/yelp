@@ -21,6 +21,11 @@ export const GET = async (request, { params: { id } }) => {
       .populate({
         path: "reviews",
         model: Review,
+        options: {
+          sort: {
+            createdAt: 'desc'
+          }
+        },
         populate: {
           path: "author",
           select: 'firstName lastName',
