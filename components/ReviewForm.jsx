@@ -65,6 +65,7 @@ const ReviewForm = () => {
             label="Review:"
             isSubmitting={isSubmitting}
             className="resize-none"
+            placeholder="Add a review..."
           />
           <Button type="submit" className="bg-black/90 hover:bg-black/85 text-white w-full mt-3" disabled={isSubmitting}>{!isSubmitting ? 'Submit' : 'Submitting...'}</Button>
         </form>

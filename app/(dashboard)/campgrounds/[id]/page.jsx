@@ -5,6 +5,8 @@ import Link from "next/link"
 import Map from "@/components/Map"
 import ImageSwiper from "@/components/ImageSwiper"
 import ReviewForm from "@/components/ReviewForm"
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { auth } from "@clerk/nextjs/server";
 
 const fetchCampground = async (id) => {
   try {
@@ -25,7 +27,7 @@ const fetchCampground = async (id) => {
 
 const Campground = async ({ params: { id } }) => {
   const camp = await fetchCampground(id)
-
+  const { sessionId } = auth()
   const { campground, geometry } = camp
 
   if (!Object.keys(campground).length) {
@@ -44,7 +46,7 @@ const Campground = async ({ params: { id } }) => {
     </main>
   }
 
-  const { title, images, description, location, author, reviews } = campground
+  const { title, images, description, location, author, reviews, createdAt } = campground
 
   return (
     <main className="container mt-10 grid grid-cols-2 gap-4 transform translate-y-20 pb-10">
@@ -59,7 +61,8 @@ const Campground = async ({ params: { id } }) => {
             <CardTitle className="mb-4 text-xl capitalize">{title}</CardTitle>
             <CardDescription className="text-black/95 mb-4 pb-2 border-b border-b-gray-300">{description}</CardDescription>
             <CardDescription className="border-b border-b-gray-300 mb-4 pb-2">Location: {location}</CardDescription>
-            <CardDescription >Author: {author.firstName} {author.lastName}</CardDescription>
+            <CardDescription className="border-b border-b-gray-300 mb-4 pb-2">Author: {author.firstName} {author.lastName}</CardDescription>
+            <CardDescription>{formatDistanceToNow(createdAt, { addSuffix: true })}</CardDescription>
           </div>
         </CardContent>
       </Card>
@@ -69,7 +72,7 @@ const Campground = async ({ params: { id } }) => {
           campgrounds={geometry}
           isMiniMap={true}
         />
-        <ReviewForm />
+        {sessionId ? <ReviewForm /> : <p className="text-sm font-bold">Reviews:</p>}
 
         {reviews.length > 0 && reviews.map(review => {
           const { _id, body, createdAt, author: { firstName, lastName } } = review
@@ -79,7 +82,7 @@ const Campground = async ({ params: { id } }) => {
                 <CardTitle className="text-sm">{firstName} {lastName}</CardTitle>
                 <CardDescription>{body}</CardDescription>
                 <div className="w-full border-t border-gray-300">
-                  <small>{createdAt}</small>
+                  <small>{formatDistanceToNow(createdAt, { addSuffix: true, })}</small>
                 </div>
               </CardContent>
             </Card>

@@ -16,6 +16,7 @@ const RenderField = ({ field, props }) => {
               {...field}
               type={props.type}
               disabled={props.isSubmitting}
+              placeholder={props.placeholder}
             /> :
             <Input
               {...fieldProps}
@@ -37,6 +38,7 @@ const RenderField = ({ field, props }) => {
             {...field}
             className={props.className}
             disabled={props.isSubmitting}
+            placeholder={props.placeholder}
           />
         </FormControl>
       )
