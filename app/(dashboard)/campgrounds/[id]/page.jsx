@@ -50,7 +50,7 @@ const Campground = async ({ params: { id } }) => {
 
   return (
     <main className="container mt-10 grid grid-cols-2 gap-4 transform translate-y-20 pb-10">
-      <Card className="max-h-[620px]">
+      <Card className="max-h-[640px]">
         <CardContent>
           <div className="max-w-full relative">
             <ImageSwiper
