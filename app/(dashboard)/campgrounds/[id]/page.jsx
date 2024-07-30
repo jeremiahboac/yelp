@@ -72,7 +72,7 @@ const Campground = async ({ params: { id } }) => {
           campgrounds={geometry}
           isMiniMap={true}
         />
-        {sessionId ? <ReviewForm /> : <p className="text-sm font-bold">Reviews:</p>}
+        {sessionId ? <ReviewForm /> : (reviews.length > 0 && <p className="text-sm font-bold">Reviews:</p>)}
 
         {reviews.length > 0 && reviews.map(review => {
           const { _id, body, createdAt, author: { firstName, lastName } } = review
